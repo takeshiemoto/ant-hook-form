@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "projects": {
+    "form-example": {
+      "root": "apps/form-example",
+      "sourceRoot": "apps/form-example/src",
+      "projectType": "application",
+      "schematics": {},
+      "architect": {
+        "build": {
+          "builder": "@nrwl/web:build",
+          "options": {
+            "outputPath": "dist/apps/form-example",
+            "index": "apps/form-example/src/index.html",
+            "main": "apps/form-example/src/main.tsx",
+            "polyfills": "apps/form-example/src/polyfills.ts",
+            "tsConfig": "apps/form-example/tsconfig.app.json",
+            "assets": [
+              "apps/form-example/src/favicon.ico",
+              "apps/form-example/src/assets"
+            ],
+            "styles": [],
+            "scripts": [],
+            "webpackConfig": "@nrwl/react/plugins/webpack"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/form-example/src/environments/environment.ts",
+                  "with": "apps/form-example/src/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/web:dev-server",
+          "options": {
+            "buildTarget": "form-example:build"
+          },
+          "configurations": {
+            "production": {
+              "buildTarget": "form-example:build:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": [
+              "apps/form-example/tsconfig.app.json",
+              "apps/form-example/tsconfig.spec.json"
+            ],
+            "exclude": ["**/node_modules/**", "!apps/form-example/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/form-example/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "form-example-e2e": {
+      "root": "apps/form-example-e2e",
+      "sourceRoot": "apps/form-example-e2e/src",
+      "projectType": "application",
+      "architect": {
+        "e2e": {
+          "builder": "@nrwl/cypress:cypress",
+          "options": {
+            "cypressConfig": "apps/form-example-e2e/cypress.json",
+            "tsConfig": "apps/form-example-e2e/tsconfig.e2e.json",
+            "devServerTarget": "form-example:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "form-example:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:lint",
+          "options": {
+            "linter": "eslint",
+            "tsConfig": ["apps/form-example-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/form-example-e2e/**/*"]
+          }
+        }
+      }
+    }
+  },
+  "cli": {
+    "defaultCollection": "@nrwl/react"
+  },
+  "schematics": {
+    "@nrwl/react": {
+      "application": {
+        "style": "styled-components",
+        "linter": "eslint",
+        "babel": true
+      },
+      "component": {
+        "style": "styled-components"
+      },
+      "library": {
+        "style": "styled-components",
+        "linter": "eslint"
+      }
+    }
+  },
+  "defaultProject": "form-example"
+}
