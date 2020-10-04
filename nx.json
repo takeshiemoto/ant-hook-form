@@ -28,6 +28,13 @@
     "form-example-e2e": {
       "tags": [],
       "implicitDependencies": ["form-example"]
+    },
+    "hook-form-base": {
+      "tags": []
+    },
+    "hook-form-base-e2e": {
+      "tags": [],
+      "implicitDependencies": ["hook-form-base"]
     }
   }
 }

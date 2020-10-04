@@ -38,13 +38,18 @@
   },
   "private": true,
   "dependencies": {
+    "@hookform/error-message": "^0.0.4",
+    "@hookform/resolvers": "^0.1.1",
+    "@types/yup": "^0.29.7",
     "antd": "^4.6.6",
     "document-register-element": "1.13.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-hook-form": "^6.8.6",
     "react-is": "16.13.1",
-    "styled-components": "5.1.1"
+    "styled-components": "5.1.1",
+    "yup": "^0.29.3",
+    "react-router-dom": "5.2.0"
   },
   "devDependencies": {
     "@babel/core": "7.9.6",
@@ -84,6 +89,7 @@
     "ts-jest": "26.1.4",
     "ts-node": "~7.0.0",
     "tslint": "~6.0.0",
-    "typescript": "~3.9.3"
+    "typescript": "~3.9.3",
+    "@types/react-router-dom": "5.1.5"
   }
 }
