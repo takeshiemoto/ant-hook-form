@@ -1,7 +1,7 @@
 import React from 'react';
-import { Input, Form, Button, Select } from 'antd';
+import { Input, Form, Button, Select, Radio, Checkbox } from 'antd';
 import { Controller, useForm } from 'react-hook-form';
-import { mixed, number, object, string } from 'yup';
+import { boolean, mixed, number, object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers';
 
 const Gender = {
@@ -10,11 +10,20 @@ const Gender = {
 } as const;
 type Gender = typeof Gender[keyof typeof Gender];
 
+const Role = {
+  ADMINISTRATOR: 'administrator',
+  STAFF: 'staff',
+  USER: 'user',
+} as const;
+type Role = typeof Role[keyof typeof Role];
+
 type FormType = {
   firstName: string;
   lastName: string;
   age: number;
   gender: Gender;
+  role: Role;
+  agree: boolean;
 };
 
 const { Option } = Select;
@@ -29,6 +38,11 @@ export const ControllerBase = () => {
     gender: mixed()
       .oneOf([...Object.values(Gender)])
       .defined(),
+    role: mixed()
+      .required()
+      .oneOf([...Object.values(Role)])
+      .defined(),
+    agree: mixed().oneOf([true]),
   });
   const { handleSubmit, control, errors } = useForm<FormType>({
     resolver: yupResolver(schema),
@@ -38,6 +52,8 @@ export const ControllerBase = () => {
       lastName: '',
       age: null,
       gender: null,
+      role: Role.ADMINISTRATOR,
+      agree: false,
     },
   });
   const onSubmit = handleSubmit((data) => {
@@ -45,8 +61,9 @@ export const ControllerBase = () => {
   });
 
   return (
-    <Form onFinish={onSubmit}>
+    <Form onFinish={onSubmit} layout={'vertical'}>
       <Form.Item
+        label={'First Name'}
         help={errors?.firstName?.message}
         validateStatus={isInValid(errors.firstName)}
         hasFeedback
@@ -54,6 +71,7 @@ export const ControllerBase = () => {
         <Controller as={Input} name={'firstName'} control={control} />
       </Form.Item>
       <Form.Item
+        label={'Last Name'}
         help={errors?.lastName?.message}
         validateStatus={isInValid(errors.lastName)}
         hasFeedback
@@ -61,6 +79,7 @@ export const ControllerBase = () => {
         <Controller as={Input} name={'lastName'} control={control} />
       </Form.Item>
       <Form.Item
+        label={'Age'}
         help={errors?.age?.message}
         validateStatus={isInValid(errors.age)}
         hasFeedback
@@ -68,17 +87,60 @@ export const ControllerBase = () => {
         <Controller as={Input} name={'age'} control={control} />
       </Form.Item>
       <Form.Item
+        label={'Gender'}
         help={errors?.gender?.message}
         validateStatus={isInValid(errors.gender)}
         hasFeedback
       >
-        <Controller as={Select} name={'gender'} control={control}>
-          {Object.values(Gender).map((gender, index) => (
-            <Option key={index} value={gender}>
-              {gender}
-            </Option>
-          ))}
-        </Controller>
+        <Controller
+          as={
+            <Select>
+              {Object.values(Gender).map((gender, index) => (
+                <Option key={index} value={gender}>
+                  {gender}
+                </Option>
+              ))}
+            </Select>
+          }
+          name={'gender'}
+          control={control}
+        />
+      </Form.Item>
+      <Form.Item label={'Role'}>
+        <Controller
+          render={({ onChange, value }) => (
+            <Radio.Group
+              onChange={(e) => onChange(e.target.value)}
+              value={value}
+            >
+              {Object.values(Role).map((role, index) => (
+                <Radio key={index} value={role}>
+                  {role}
+                </Radio>
+              ))}
+            </Radio.Group>
+          )}
+          name={'role'}
+          control={control}
+        />
+      </Form.Item>
+      <Form.Item
+        label={'Agree'}
+        help={errors?.agree?.message}
+        validateStatus={isInValid(errors.agree)}
+        hasFeedback
+      >
+        <Controller
+          render={({ onChange, value }) => (
+            <Checkbox
+              checked={value}
+              onChange={(e) => onChange(e.target.checked)}
+            />
+          )}
+          name="agree"
+          type="checkbox"
+          control={control}
+        />
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
