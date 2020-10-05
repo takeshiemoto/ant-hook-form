@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input, Form, Button, Select, Radio, Checkbox } from 'antd';
 import { Controller, useForm } from 'react-hook-form';
-import { boolean, mixed, number, object, string } from 'yup';
+import { mixed, number, object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers';
 
 const Gender = {
