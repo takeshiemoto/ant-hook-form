@@ -1,7 +1,7 @@
 import React from 'react';
 import { Input, Form, Button, Select, Radio, Checkbox } from 'antd';
 import { Controller, useForm } from 'react-hook-form';
-import { mixed, number, object, string } from 'yup';
+import { array, mixed, number, object, string } from 'yup';
 import { yupResolver } from '@hookform/resolvers';
 
 const Gender = {
@@ -24,6 +24,7 @@ type FormType = {
   gender: Gender;
   role: Role;
   agree: boolean;
+  color: string[];
 };
 
 const { Option } = Select;
@@ -43,8 +44,9 @@ export const ControllerBase = () => {
       .oneOf([...Object.values(Role)])
       .defined(),
     agree: mixed().oneOf([true]),
+    color: array().of(string()).required(),
   });
-  const { handleSubmit, control, errors } = useForm<FormType>({
+  const { handleSubmit, control, errors, register } = useForm<FormType>({
     resolver: yupResolver(schema),
     mode: 'onBlur',
     defaultValues: {
@@ -54,11 +56,14 @@ export const ControllerBase = () => {
       gender: null,
       role: Role.ADMINISTRATOR,
       agree: false,
+      color: [],
     },
   });
   const onSubmit = handleSubmit((data) => {
     console.log(data);
   });
+
+  console.log({ errors });
 
   return (
     <Form onFinish={onSubmit} layout={'vertical'}>
@@ -141,6 +146,26 @@ export const ControllerBase = () => {
           type="checkbox"
           control={control}
         />
+      </Form.Item>
+      <Form.Item
+        label={'Favorite Color'}
+        validateStatus={isInValid(errors.color)}
+        help={errors?.color ? errors.color['message'] : undefined}
+        hasFeedback
+      >
+        {['red', 'blue', 'green'].map((c, i) => {
+          return (
+            <label key={i}>
+              <input
+                type={'checkbox'}
+                value={c}
+                name={'color'}
+                ref={register}
+              />
+              {c}
+            </label>
+          );
+        })}
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
